@@ -2,11 +2,11 @@
 
 ## Project Structure
 
-This repository currently contains product documentation: `_docs/plan.md` is the MVP specification, and `_docs/tasks.md` is the implementation backlog. Application code does not exist yet. The planned stack is Django with server-rendered templates, PostgreSQL, and Celery/Celery Beat for scheduled weekly cycle changes. Keep future Django apps, templates, static assets, and tests in clearly named project directories; update this guide when the structure is established.
+The repository contains product documentation in `_docs/`: `plan.md` is the MVP specification, `architecture.md` describes the intended design, and `tasks.md` is the implementation backlog. The initial Django scaffold lives in `config/`, with the basic health endpoint and test in `health/`. The planned stack is Django with server-rendered templates, PostgreSQL, and Celery/Celery Beat for scheduled weekly cycle changes. Keep future Django apps, templates, static assets, and tests in clearly named project directories.
 
 ## Build, Test, and Development
 
-The initial project setup is tracked in GitHub issue #1. Once it is implemented, use the documented project commands; the expected Django test command is `python manage.py test`, and the local development server is `python manage.py runserver`. Add dependency installation, database, and worker commands here when the project scaffold defines them. Do not claim a command passes unless you have run it.
+Install dependencies with `python3 -m pip install -r requirements.txt`. Run the Django test suite with `python3 manage.py test` and start the local development server with `python3 manage.py runserver`. SQLite is used as a local scaffold default; PostgreSQL configuration, database, and worker commands will be documented when those tasks are implemented. Do not claim a command passes unless you have run it.
 
 ## Style and Naming
 
@@ -19,6 +19,10 @@ Use Django’s test runner and name test modules `test_*.py`; use descriptive `t
 ## Commits and Pull Requests
 
 The available history uses short imperative commit subjects (for example, `Add weekly feedback product plan`). Keep commits focused and use the same style. Pull requests should summarize the behavior changed, link related issues, include test results, and provide screenshots for visible UI changes. Call out configuration or migration steps.
+
+## Work Process
+
+Track tasks as GitHub issues and work on one issue at a time. Commit regularly as work progresses.
 
 ## Security and Configuration
 
