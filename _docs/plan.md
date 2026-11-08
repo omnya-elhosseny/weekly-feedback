@@ -1,25 +1,19 @@
 # Weekly Team Feedback Tool
 ## Product Requirements Specification (PRD)
 
-**Version:** 0.1  
-**Status:** Initial MVP specification  
+**Version:** 0.2
+**Status:** MVP scope
 **Platform:** Web application
 
 ---
 
 ## 1. Product Overview
 
-The Weekly Team Feedback Tool is a web application designed to improve continuous team communication and reflection through structured weekly feedback cycles and team retrospectives.
+The Weekly Team Feedback Tool is a web application for structured Start / Stop / Continue feedback and team retrospectives. Each cycle is started and ended by the team administrator. Members submit feedback individually, and the administrator opens the retrospective when the team is ready.
 
-The application uses the Start / Stop / Continue methodology.
-
-Team members submit feedback individually throughout the week. At a scheduled time, a retrospective begins, allowing team members to review and discuss feedback collectively.
-
-The application prioritizes simplicity, ease of use, and a predictable weekly workflow.
+The MVP prioritizes a simple, manually controlled cycle with clear privacy and access rules. Recurring schedules, automatic cycle transitions, email invitations, and worker processes are post-MVP.
 
 ## 2. Product Goals
-
-The primary goals are:
 
 1. Make weekly feedback collection easier.
 2. Make team retrospectives more effective.
@@ -29,21 +23,26 @@ The primary goals are:
 
 ### Included
 - One team per installation.
-- Team administration.
-- Member invitations by email.
+- Initial team and admin setup.
+- Admin-created member accounts that are confirmed and usable immediately; no invitation email is sent.
 - Admin and member roles.
-- Automatic recurring weekly cycles.
+- Admin-controlled cycle start, retrospective opening, and cycle closure.
 - Start / Stop / Continue feedback submission.
-- Feedback editing and deletion.
-- Scheduled retrospective activation.
+- Feedback editing and deletion until the admin closes the cycle.
 - Shared retrospective feedback board.
-- Weekly cycle closure.
-- Historical cycle archiving.
+- Historical cycle archiving, accessible to the admin only.
+- PostgreSQL configured and run locally with Docker.
+
+### Post-MVP
+- Email invitations and invitation acceptance links.
+- Configurable recurring weekly schedule and team timezone.
+- Automatic recurring cycle creation and transitions.
+- Background worker and scheduler configuration.
 
 ### Excluded
 - Multiple teams.
 - Anonymous feedback.
-- Notifications.
+- Notifications and reminders.
 - Action-item management.
 - Advanced analytics and reporting.
 - Project management functionality.
@@ -54,14 +53,12 @@ The primary goals are:
 
 ### 4.1 Team Admin
 
-The admin is responsible for managing the team.
+The admin manages the team and cycle lifecycle.
 
 Permissions:
 - Participate in feedback cycles like any other member.
-- Invite members through email.
-- Remove members.
-- Configure the weekly schedule.
-- Select the team timezone.
+- Create and remove member accounts.
+- Start a cycle, open its retrospective, and close it.
 - Access historical feedback cycles.
 
 Restrictions:
@@ -72,164 +69,95 @@ Restrictions:
 
 Permissions:
 - Submit feedback.
-- Edit and delete personal feedback until the weekly cycle ends.
+- Edit and delete personal feedback until the admin closes the cycle.
 - View other members' feedback when the retrospective is active and their own submission is complete.
 - Participate in team retrospectives.
 
 Restrictions:
-- Cannot manage team membership.
-- Cannot configure the weekly schedule.
+- Cannot manage team membership or cycle state.
 - Cannot access historical cycles.
 
-## 5. Weekly Feedback Cycle
+## 5. Feedback Cycle
 
-The application must automatically create recurring weekly feedback cycles according to the schedule configured during initial team setup.
+The MVP supports one active cycle at a time. The admin starts a cycle and later opens the retrospective and closes the cycle using explicit actions. A cycle has a start time, retrospective-open time, and close time recorded by the application; it does not repeat automatically.
 
 ### 5.1 Feedback Categories
 
 Every cycle contains three categories:
-
 - **Start:** Things the team should start doing.
 - **Stop:** Things the team should stop doing.
 - **Continue:** Things the team should continue doing.
 
-Each category has one text field per member.
-
-Requirements:
-- Members may leave individual categories empty.
-- At least one category must contain feedback before submission is accepted.
-- Feedback is associated with its author.
-- Feedback is not anonymous.
-- Members can edit or delete their submissions until the weekly cycle ends.
+Members may leave individual categories empty, but at least one category must contain feedback before submission is accepted. Feedback is attributed to its author and can be edited or deleted until cycle closure.
 
 ### 5.2 Feedback Visibility
 
-Before the retrospective begins:
-- Feedback content is hidden from other members.
-- Participation status is hidden from other members.
-- Members cannot view other members' submissions.
+Before the admin opens the retrospective, feedback content and participation status are hidden from other members. Each member can view only their own submission.
 
-When the retrospective begins:
-- Submitted feedback becomes available for team discussion.
-- Each member must submit their own feedback before viewing other members' feedback.
-- Members who have not submitted can still submit during the retrospective.
+After the retrospective opens, submitted feedback becomes available for discussion, but a member must submit their own feedback before viewing other members' feedback. Members may still submit during the retrospective.
 
 ## 6. Retrospective
 
-The retrospective begins automatically at its configured weekly time.
-
-Requirements:
-- All team members can participate.
-- The admin participates like any other member.
-- Feedback is displayed in a shared board.
-- Feedback is grouped into Start, Stop, and Continue.
-- All available feedback is displayed together rather than requiring a guided category-by-category process.
-- Members can continue submitting feedback during the retrospective.
-- Members can edit or delete their feedback until the weekly cycle ends.
+The admin opens the retrospective manually. All team members can participate. Feedback appears together on a shared board grouped by Start, Stop, and Continue. Members can continue submitting and editing feedback until the cycle is closed.
 
 The retrospective does not require an action-item management system in the MVP.
 
-## 7. Weekly Cycle Closure
+## 7. Cycle Closure and History
 
-Each cycle ends at a fixed scheduled time, regardless of whether the retrospective has finished.
+The admin closes the cycle manually. On closure, submissions become read-only and the cycle is archived. Only the admin can access historical cycles; members cannot browse previous cycles.
 
-When the cycle ends:
-- Feedback submissions are closed.
-- Editing and deletion are disabled.
-- The cycle is archived.
-- Historical feedback becomes accessible to the admin only.
+Historical records preserve cycle dates, feedback, authors, and categories.
 
 ## 8. Team Setup and Membership
 
-The first admin account is created through a predefined setup process.
-
-During team setup, the admin:
-- Establishes the team.
-- Configures the recurring weekly schedule.
-- Selects the team's timezone.
-
-The admin can invite members through email and remove existing members.
+The first admin account is created through a predefined setup process. The admin establishes the team and can create and remove member accounts from the admin interface. Member accounts are confirmed and usable immediately when created; onboarding email and invitation acceptance are not part of the MVP.
 
 There is one designated admin. Role promotion and custom permission management are outside MVP scope.
 
-## 9. Scheduling and Timezone
+## 9. Post-MVP Scheduling
 
-The weekly schedule is configured once during team setup and repeats automatically.
-
-The team selects its timezone during setup.
-
-All cycle scheduling and retrospective activation must respect the selected team timezone.
-
-The exact weekly start, retrospective, and closing times must be configurable as part of setup.
+The MVP does not configure a recurring schedule or team timezone. The admin controls each cycle’s start, retrospective opening, and closure directly. Post-MVP work may add recurring schedule settings, timezone handling, automatic cycle creation and transitions, and background scheduling services.
 
 ## 10. Notifications
 
-The MVP does not include:
-- Email notifications for weekly events.
-- In-app notifications.
-- Reminder systems.
+The MVP does not include email invitations, email notifications, in-app notifications, or reminders.
 
-Email invitations remain supported as part of team onboarding.
-
-## 11. Historical Data
-
-Completed cycles are archived.
-
-Only the team admin can access historical cycles.
-
-Team members cannot browse previous cycles.
-
-Historical records should preserve:
-- Cycle dates.
-- Team feedback.
-- Feedback authors.
-- Feedback categories.
-
-## 12. Core User Journey
+## 11. Core User Journey
 
 1. Admin completes initial team setup.
-2. Admin configures the weekly schedule and timezone.
-3. Admin invites team members.
-4. A weekly cycle starts automatically.
-5. Members submit their individual feedback.
-6. The retrospective starts automatically.
-7. Members submit their own feedback if they have not already done so.
-8. Members review and discuss the shared feedback board.
-9. The cycle closes automatically.
-10. Feedback is archived and becomes accessible to the admin.
+2. Admin creates member accounts; members can sign in immediately.
+3. Admin starts a feedback cycle.
+4. Members submit individual feedback.
+5. Admin opens the retrospective.
+6. Members review and discuss the shared board after submitting their own feedback.
+7. Admin closes the cycle.
+8. Feedback is archived and becomes accessible to the admin.
 
-## 13. MVP Design Principles
+## 12. MVP Design Principles
 
 - Simple and intuitive interface.
+- Clear cycle status and explicit admin controls.
 - Minimal configuration.
-- Clear weekly cycle status.
-- No unnecessary features.
-- Consistent user experience for admin and members.
-- Responsive web interface.
+- Responsive web interface using Django templates, HTML, and plain CSS.
 - Clear separation between feedback submission and retrospective visibility.
 
-## 14. Acceptance Criteria
+## 13. Acceptance Criteria
 
-The MVP is considered functionally complete when:
-
+The MVP is functionally complete when:
 1. An admin can complete initial team setup.
-2. The admin can invite and remove members.
-3. The team can configure a recurring weekly schedule and timezone.
-4. Weekly cycles start automatically.
-5. Members can submit feedback in the three categories.
-6. Empty submissions are rejected.
-7. Members can edit and delete their feedback until cycle closure.
-8. Feedback remains hidden before the retrospective.
-9. Participation status remains hidden before the retrospective.
-10. The retrospective activates automatically.
-11. Members must submit their own feedback before viewing other members' feedback.
-12. All team members can participate in the retrospective.
-13. Feedback is grouped by category.
-14. The cycle closes automatically at the configured time.
-15. Feedback becomes read-only after closure.
-16. Historical cycles are accessible only to the admin.
-17. The application does not generate email or in-app event notifications.
+2. The admin can create and remove member accounts without sending invitation emails.
+3. An admin can start, open the retrospective for, and close a cycle manually.
+4. Members can submit feedback in the three categories; entirely empty submissions are rejected.
+5. Members can edit and delete their feedback until cycle closure.
+6. Feedback and participation status remain hidden before retrospective opening.
+7. Members must submit their own feedback before viewing other members' feedback.
+8. All team members can participate in the retrospective.
+9. Feedback is grouped by category on the shared board.
+10. Feedback becomes read-only after the admin closes the cycle.
+11. Historical cycles are accessible only to the admin.
+12. The application does not send invitation, notification, or reminder emails.
+13. Local development can run PostgreSQL using Docker.
 
 ---
 
-**End of initial MVP specification.**
+**End of MVP specification.**
