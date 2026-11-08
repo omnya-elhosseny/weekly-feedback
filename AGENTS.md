@@ -2,7 +2,13 @@
 
 ## Project Structure
 
-The repository contains product documentation in `_docs/`: `plan.md` is the MVP specification, `architecture.md` describes the intended design, and `tasks.md` is the implementation backlog. The initial Django scaffold lives in `config/`, with the basic health endpoint and test in `health/`. The planned stack is Django with server-rendered templates, PostgreSQL, and Celery/Celery Beat for scheduled weekly cycle changes. Keep future Django apps, templates, static assets, and tests in clearly named project directories.
+The repository contains product documentation in `_docs/`:
+`plan.md` is the MVP specification. 
+`architecture.md` describes the intended design.
+`tasks.md` is the implementation backlog. 
+`config/` is The initial Django scaffold lives.
+`health/` is the basic health endpoint and test.
+`_docs/process.md` how work is organized.
 
 ## Build, Test, and Development
 
